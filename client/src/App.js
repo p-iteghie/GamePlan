@@ -1,6 +1,10 @@
 
 import Visuals from './Visuals';
-import LoginInput from './LoginInput';
+import Register from './Register';
+
+
+
+
 
 function App()
 {
@@ -8,7 +12,9 @@ function App()
   return(
     <div>
       <Visuals/>
-      <LoginInput/>
+
+      <Register/>
+      
      </div>
   );
 }
