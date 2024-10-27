@@ -52,3 +52,11 @@ const {username, password} = req.body;
         >
         Open Form
         </button>
+
+
+<div>
+      <Visuals/>
+
+      <Register/>
+      
+     </div>

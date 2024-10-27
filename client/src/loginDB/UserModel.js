@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema(
         type: String,
         required: true
     },
-
+//add unique id variable for extra security
 
     });
 
