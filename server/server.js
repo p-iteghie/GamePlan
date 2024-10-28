@@ -12,6 +12,7 @@ const app = express()
 const PORT = process.env.PORT || 3000;
 connectDB();
 
+
 app.use(cors());
 app.use(express.json()); // Built-in body-parser for JSON
 app.use(express.urlencoded({ extended: true }));
@@ -43,6 +44,9 @@ app.post('/register', (req, res) => {
             result,
         });
         console.log("Submitted form and user saved\n");
+
+        
+
         console.log(`Username: ${username}, Password: ${password}`);
         })
         .catch((error) => {
@@ -120,7 +124,17 @@ app.post('/login', (req, res) => {
 });
 
 
-
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find(); // Fetch all users
+    console.log('Fetched User Data:', users); // Log to the terminal
+    res.json(users); // Return the data to the frontend
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).send('Server Error');
+  }
+  //console.log(users);
+});
 
 
 app.listen(5000, () => {console.log("Server started on port 5000")})

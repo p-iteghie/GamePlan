@@ -1,6 +1,6 @@
 import Visuals from './Visuals';
 import Register from './Register';
-import Login from './Login';
+import { Login, GetUserButton} from './Login';
 
 
 
@@ -17,6 +17,8 @@ function App()
       <Register/>
 
       <Login/>
+
+      <GetUserButton/>
       
      </div>
   );

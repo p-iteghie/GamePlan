@@ -26,6 +26,8 @@ function Login()
     setResponseMessage(data.message);  // Assuming the server returns a message  
   };
 
+  
+
   return (
     <div style={{ padding: '20px' }}>
       <form onSubmit={handleSubmit}>
@@ -59,4 +61,33 @@ function Login()
 
 };
 
-export default Login;
+
+const GetUserButton = () => {
+  const [userData, setUserData] = useState(null);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/users'); // Fetch from your endpoint
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setUserData(data);
+
+      
+      console.log('Fetched User Data:', data); // Print to the browser console
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={fetchUserData}>Get User Data</button>
+    </div>
+
+    
+  );
+};
+
+export { Login, GetUserButton };
