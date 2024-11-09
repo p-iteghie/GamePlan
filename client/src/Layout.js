@@ -5,7 +5,7 @@ import Register from './Register';
 const Layout = () => {
   return (
     <>
-      <h2>hey there</h2>
+      {/* <h2>hey there</h2> */}
       <nav>
         <ul>
           <li>
