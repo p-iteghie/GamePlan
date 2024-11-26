@@ -2,8 +2,9 @@ const express = require('express')
 const cors = require('cors')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const connectDB = require('../client/src/db');
+const { connectDB, clearDatabase } = require('../client/src/db');
 const User = require('../client/src/loginDB/UserModel.js');
+const Event = require('../client/src/loginDB/EventModel.js');
 
 
 
@@ -11,6 +12,7 @@ const User = require('../client/src/loginDB/UserModel.js');
 const app = express()
 const PORT = process.env.PORT || 3000;
 connectDB();
+//clearDatabase(); IF YOU WANT TO CLEAR DB
 
 
 app.use(cors());
@@ -95,12 +97,8 @@ app.post('/login', (req, res) => {
 
           //   return success response
           console.log("Login successful");
-          res.status(200).send({
-            message: "Login Successful",
-            username: user.username,
-            token,
-          });
-          
+
+        return res.json({ token: token });
         })
         // catch error if password does not match
         .catch((error) => {
@@ -135,6 +133,75 @@ app.get('/users', async (req, res) => {
   }
   //console.log(users);
 });
+
+app.post('/events', async (req, res) => {
+    try {
+        const token = req.header('Authorization')?.split(' ')[1]; // Get the token from the header
+
+        if (!token) {
+            return res.status(401).json({ message: 'No token, authorization denied' });
+        }
+
+        try {
+            // Decode the token
+            const decoded = jwt.verify(token, 'RANDOM-TOKEN'); // Replace with your secret key
+            console.log('Decoded token:', decoded); // Check if the token decodes properly
+
+            const loggedInUsername = decoded.username; // Extract the username from the token
+
+            if (!loggedInUsername) {
+                return res.status(400).json({ message: 'Username not found in token' });
+            }
+
+            // Find the user using the username decoded from the token
+            const user = await User.findOne({ username: loggedInUsername });
+
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            console.log('User found:', user); // Log the user to check the fetched user details
+
+            // Extract event data from the request body
+            const { title, description, startTime, endTime, location, attendees } = req.body;
+
+            // Create a new event with the logged-in user's ID (from the decoded token)
+            const event = new Event({
+                title,
+                description,
+                startTime,
+                endTime,
+                location,
+                userId: user._id, // Use the logged-in user's _id
+                attendees,
+            });
+
+            const savedEvent = await event.save();
+
+            // Add the event to the logged-in user's calendar
+            user.calendar.push(savedEvent._id);
+            await user.save();
+
+            // Add the event to attendees' calendars
+            for (const attendeeId of attendees) {
+                const attendee = await User.findOne({ _id: attendeeId }); // Use _id instead of username
+                if (attendee) {
+                    attendee.calendar.push(savedEvent._id);
+                    await attendee.save();
+                }
+            }
+
+            res.status(200).json({ message: 'Event added successfully', event: savedEvent });
+        } catch (error) {
+            console.error('Error decoding token or fetching user:', error);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    } catch (error) {
+        console.error('Error extracting token:', error);
+        return res.status(401).json({ message: 'Token error' });
+    }
+});
+
 
 
 app.listen(5000, () => {console.log("Server started on port 5000")})
