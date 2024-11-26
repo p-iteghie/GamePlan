@@ -4,6 +4,7 @@ import Visuals from './Visuals';
 import Register from './Register';
 import AddEvent from './AddEvent';
 import { Login, GetUserButton } from './Login';
+import SendFriendRequest from './Friends'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                         <Visuals />
                         <Register />
                         <Login />
+                        <SendFriendRequest />
                     </div>
                 } />
                 <Route path="/register" element={<Register />} />

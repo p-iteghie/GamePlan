@@ -202,6 +202,66 @@ app.post('/events', async (req, res) => {
     }
 });
 
+// Route to send friend request
+app.post('/send-friend-request', async (req, res) => {
+    const { username } = req.body;
+
+    const token = req.header('Authorization')?.split(' ')[1]; // Get the token from the header
+
+    if (!token) {
+        return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    try {
+        // Decode the token
+        const decoded = jwt.verify(token, 'RANDOM-TOKEN'); // Replace with your secret key
+        console.log('Decoded token:', decoded); // Check if the token decodes properly
+
+        const loggedInUsername = decoded.username; // Extract the username from the token
+
+        if (!loggedInUsername) {
+            return res.status(400).json({ message: 'Username not found in token' });
+        }
+
+        // Find the user using the username decoded from the token
+        const user = await User.findOne({ username: loggedInUsername });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        console.log('User found:', user);
+
+        // Find the target user by username
+        const targetUser = await User.findOne({ username });
+        console.log(targetUser);
+
+        if (!targetUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Check if it's not the logged-in user
+        if (targetUser.username.toString() === user.username.toString()) {
+            return res.status(400).json({ message: 'You cannot send a friend request to yourself' });
+        }
+
+        // Check if the friend request has already been sent
+        if (targetUser.friendReqs.includes(user._id)) {
+            return res.status(400).json({ message: 'Friend request already sent' });
+        }
+
+        // Add the logged-in user to the target user's friend requests
+        targetUser.friendReqs.push(user);
+        await targetUser.save();
+
+        res.status(200).json({ message: 'Friend request sent successfully' });
+    } catch (error) {
+        console.error('Error sending friend request:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
 
 
 app.listen(5000, () => {console.log("Server started on port 5000")})

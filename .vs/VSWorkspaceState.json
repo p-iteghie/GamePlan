@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\client",
+    "\\client\\public",
+    "\\client\\src",
+    "\\client\\src\\loginDB",
+    "\\client\\src\\middlewares",
+    "\\client\\src\\models",
+    "\\client\\src\\routes",
+    "\\client\\src\\Styles",
+    "\\server"
+  ],
+  "PreviewInSolutionExplorer": false
+}
