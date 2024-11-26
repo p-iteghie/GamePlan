@@ -261,6 +261,42 @@ app.post('/send-friend-request', async (req, res) => {
     }
 });
 
+app.get('/getevents', async (req, res) => {
+    const token = req.header('Authorization')?.split(' ')[1]; // Get the token from the header
+    
+    if (!token) {
+        
+        return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    try {
+        // Decode the token
+        const decoded = jwt.verify(token, 'RANDOM-TOKEN'); // Replace with your secret key
+        console.log('Decoded token:', decoded); // Check if the token decodes properly
+
+        const loggedInUsername = decoded.username; // Extract the username from the token
+
+        if (!loggedInUsername) {
+            return res.status(400).json({ message: 'Username not found in token' });
+        }
+
+        // Find the user using the username decoded from the token
+        const user = await User.findOne({ username: loggedInUsername });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        console.log('Events found:', user.calendar);
+
+        res.json(user.calendar); // Return the data to the frontend
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).send('Server Error');
+    }
+    
+});
+
 
 
 
