@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Visuals from './Visuals';
 import Register from './Register';
 import AddEvent from './AddEvent';
+import Calendar from './Calendar';
 import { Login, GetUserButton } from './Login';
 import SendFriendRequest from './Friends'
 
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/getuser" element={<GetUserButton />} />
                 <Route path="/events" element={<AddEvent />} />
+                <Route path="/calendar" element={<Calendar />} />
                 <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
         </div>

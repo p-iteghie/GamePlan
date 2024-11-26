@@ -1,0 +1,85 @@
+/* Container for the calendar */
+.calendar-container {
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Header styling */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  header button {
+    padding: 8px 16px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  header button:hover {
+    background-color: #0056b3;
+  }
+  
+  header h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  /* Calendar grid styling */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+  }
+  
+  .calendar-day {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+  }
+  
+  .calendar-day:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Styling for the date number */
+  .date {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  /* Events container */
+  .events {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  /* Individual event styling */
+  .event {
+    background-color: #007BFF;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .event:hover {
+    background-color: #0056b3;
+  }
+  
