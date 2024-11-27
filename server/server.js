@@ -245,10 +245,17 @@ app.post('/send-friend-request', async (req, res) => {
             return res.status(400).json({ message: 'You cannot send a friend request to yourself' });
         }
 
+        if (targetUser.friends.includes(user._id)) {
+            return res.status(400).json({ message: 'You are already friends!' });
+        }
+
         // Check if the friend request has already been sent
         if (targetUser.friendReqs.includes(user._id)) {
             return res.status(400).json({ message: 'Friend request already sent' });
         }
+
+        
+
 
         // Add the logged-in user to the target user's friend requests
         targetUser.friendReqs.push(user);
@@ -297,8 +304,113 @@ app.get('/getevents', async (req, res) => {
     
 });
 
+app.get('/get-friend-requests', async (req, res) => {
+    const token = req.header('Authorization')?.split(' ')[1]; // Get the token from the header
+
+    if (!token) {
+
+        return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    try {
+        // Decode the token
+        const decoded = jwt.verify(token, 'RANDOM-TOKEN'); // Replace with your secret key
+        console.log('Decoded token:', decoded); // Check if the token decodes properly
+
+        const loggedInUsername = decoded.username; // Extract the username from the token
+
+        if (!loggedInUsername) {
+            return res.status(400).json({ message: 'Username not found in token' });
+        }
+
+        const user = await User.findOne({ username: loggedInUsername }).populate('friendReqs', 'username');
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+        console.log(user.friendReqs);
+        res.status(200).send(user.friendReqs);
+    } catch (error) {
+        console.error('Error fetching friend requests:', error);
+        res.status(500).send({ message: 'Server error' });
+    }
+});
+
+app.post('/accept-friend-request', async (req, res) => {
+    const { userId, requesterId } = req.body;  // userId = logged-in user, requesterId = the user who sent the request
+
+    try {
+        const user = await User.findOne({ username: userId });
+        const requester = await User.findById(requesterId);
+        //console.log(userId);
+        // Remove the friend request from the user's friendRequests array
+        user.friendReqs = user.friendReqs.filter(id => id.toString() !== requesterId);
+        requester.friendReqs = requester.friendReqs.filter(id => id.toString() !== user._id.toString());
+        // Add the requester to the user's friends array and vice versa
+        user.friends.push(requester);
+        requester.friends.push(user);
+
+        // Save the updated users
+        await user.save();
+        await requester.save();
+
+        res.status(200).send({ message: 'Friend request accepted successfully!' });
+    } catch (error) {
+        console.error('Error accepting friend request:', error);
+        res.status(500).send({ message: 'Server error' });
+    }
+});
+
+// Deny friend request
+app.post('/deny-friend-request', async (req, res) => {
+    const { userId, requesterId } = req.body;  // userId = logged-in user, requesterId = the user who sent the request
+
+    try {
+        const user = await User.findOne({ username: userId });
+        const requester = await User.findById(requesterId);
+        // Remove the friend request from the user's friendRequests array
+        user.friendReqs = user.friendReqs.filter(id => id.toString() !== requesterId);
+        requester.friendReqs = requester.friendReqs.filter(id => id.toString() !== user._id.toString());
+
+        await user.save();
+        await requester.save();
+        res.status(200).send({ message: 'Friend request denied!' });
+    } catch (error) {
+        console.error('Error denying friend request:', error);
+        res.status(500).send({ message: 'Server error' });
+    }
+});
 
 
+app.get('/get-friends', async (req, res) => {
+    const token = req.header('Authorization')?.split(' ')[1]; // Get the token from the header
+
+    if (!token) {
+
+        return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+
+    try {
+        // Decode the token
+        const decoded = jwt.verify(token, 'RANDOM-TOKEN'); // Replace with your secret key
+        console.log('Decoded token:', decoded); // Check if the token decodes properly
+
+        const loggedInUsername = decoded.username; // Extract the username from the token
+
+        if (!loggedInUsername) {
+            return res.status(400).json({ message: 'Username not found in token' });
+        }
+
+        const user = await User.findOne({ username: loggedInUsername }).populate('friends', 'username');
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        res.status(200).send(user.friends);
+    } catch (error) {
+        console.error('Error fetching friends:', error);
+        res.status(500).send({ message: 'Server error' });
+    }
+});
 
 app.listen(5000, () => {console.log("Server started on port 5000")})
 

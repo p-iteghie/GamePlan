@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Visuals from './Visuals';
 import Register from './Register';
 import AddEvent from './AddEvent';
+import FriendRequests from './AddFriend';
 import Calendar from './Calendar';
 import { Login, GetUserButton } from './Login';
 import SendFriendRequest from './Friends'
@@ -26,6 +27,7 @@ function App() {
                         <Register />
                         <Login />
                         <SendFriendRequest />
+                        <FriendRequests />
                     </div>
                 } />
                 <Route path="/register" element={<Register />} />

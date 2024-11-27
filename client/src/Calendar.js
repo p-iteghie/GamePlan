@@ -74,55 +74,71 @@ function Calendar() {
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
 
-  return (
-    <div className="Calendar">
-          <h1>GamePlan Calendar</h1>
-          <div>
-              
-              <h3>Event Data:</h3>
-              <pre>{JSON.stringify(events, null, 2)}</pre>
-          </div>
-          <div>
-              <h3>Filtered Event Data:</h3>
-              <pre>{JSON.stringify(filteredEvents, null, 2)}</pre>
-          </div>
-      <div className="calendar-container">
-        <header>
-          <button onClick={() => changeMonth(-1)}>Previous</button>
-          <h2>
-            {currentDate.toLocaleString("default", { month: "long" })} {currentDate.getFullYear()}
-          </h2>
-          <button onClick={() => changeMonth(1)}>Next</button>
-        </header>
-        <div className="calendar-grid">
-          {Array.from({ length: daysInMonth }, (_, i) => {
-          const day = i + 1; // Calendar days start from 1
-          const dayEvents = filteredEvents.filter(event => {
-            const eventDate = new Date(event.startTime); // Ensure this matches your schema
-            return (
-              eventDate.getDate() === day &&
-              eventDate.getMonth() === currentDate.getMonth() &&
-              eventDate.getFullYear() === currentDate.getFullYear()
-            );
-          });
+    return (
+        <div className="Calendar">
+            <h1>GamePlan Calendar</h1>
 
-            return (
-              <div className="calendar-day" key={day}>
-                <div className="date">{day}</div>
-                <div className="events">
-                  {dayEvents.map((event, index) => (
-                    <div className="event" key={index}>
-                      {event.title}
-                    </div>
-                  ))}
+            {/* Debug panels for events */}
+            <div>
+                <h3>Event Data (Raw):</h3>
+                <pre>{JSON.stringify(events, null, 2)}</pre>
+            </div>
+            <div>
+                <h3>Filtered Event Data:</h3>
+                <pre>{JSON.stringify(filteredEvents, null, 2)}</pre>
+            </div>
+
+            {/* Calendar UI */}
+            <div className="calendar-container">
+                <header>
+                    <button onClick={() => changeMonth(-1)}>Previous</button>
+                    <h2>
+                        {currentDate.toLocaleString("default", { month: "long" })} {currentDate.getFullYear()}
+                    </h2>
+                    <button onClick={() => changeMonth(1)}>Next</button>
+                </header>
+
+                <div className="calendar-grid">
+                    {Array.from({ length: daysInMonth }, (_, i) => {
+                        const day = i + 1; // Calendar days start from 1
+
+                        // Get the date for the current calendar day
+                        const currentDayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+
+                        // Filter the events for this day
+                        const dayEvents = filteredEvents.filter(event => {
+                            const eventStartTime = new Date(event.startTime);
+                            const eventEndTime = new Date(event.endTime);
+
+                            // Ensure events spanning multiple days (or starting on this day) are displayed
+                            return (
+                                // If the event starts on or before the current day and ends on or after this day
+                                (eventStartTime <= currentDayDate && eventEndTime >= currentDayDate) ||
+                                // If the event starts before the current day and ends on or after the current day (spans the day)
+                                (eventStartTime < currentDayDate && eventEndTime >= currentDayDate) ||
+                                // Special case: If the event starts on this day and the end time is in the future
+                                (eventStartTime.getDate() === currentDayDate.getDate() && eventStartTime.getMonth() === currentDayDate.getMonth())
+                            );
+                        });
+
+                        return (
+                            <div className="calendar-day" key={day}>
+                                <div className="date">{day}</div>
+                                <div className="events">
+                                    {dayEvents.map((event, index) => (
+                                        <div className="event" key={index}>
+                                            {event.title || "No Title"}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
-              </div>
-            );
-          })}
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
+
 };
 
 export default Calendar;

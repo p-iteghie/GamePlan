@@ -35,11 +35,18 @@ function AddEvent() {
         if (loggedInUsername) {  // Only fetch users if loggedInUsername is available
             const fetchUsers = async () => {
                 try {
-                    const response = await fetch('http://localhost:5000/users'); // Adjust URL as needed
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`http://localhost:5000/get-friends`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
                     const data = await response.json();
                     // Filter out the logged-in user from the fetched data
-                    const filteredUsers = data.filter(user => user.username !== loggedInUsername);
-                    setUsers(filteredUsers); // Set users state with the filtered data
+                    
+                    setUsers(data); // Set users state with the filtered data
                 } catch (error) {
                     console.error('Error fetching users:', error);
                 }
