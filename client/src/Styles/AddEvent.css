@@ -1,0 +1,120 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px; /* Add space between the content and the edges of the screen */
+    background-color: #f4f4f4;
+}
+
+/* Container Styling */
+.form-container {
+    max-width: 800px;
+    margin: 0 auto; /* Center the form container */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styling */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #007BFF;
+    text-transform: uppercase;
+}
+
+/* Form Elements Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+    align-items: flex-start; /* Align all elements to the left */
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* Input and Textarea Styling */
+input[type="text"],
+input[type="password"],
+input[type="datetime-local"],
+textarea {
+    width: 100%;
+    max-width: 400px; /* Uniform size for all fields */
+    padding: 10px; /* Consistent padding */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px; /* Add spacing between fields */
+}
+
+textarea {
+    resize: none;
+    height: 100px;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Button Styling */
+button {
+    padding: 10px 20px; /* Consistent padding for buttons */
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    max-width: 400px; /* Match width of text fields */
+    text-align: center; /* Center the text inside the button */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Checkbox Group */
+.attendees-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start; /* Left align checkboxes */
+}
+
+.attendees-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+input[type="checkbox"] {
+    accent-color: #007BFF;
+}
+
+/* Response Message Styling */
+p {
+    font-size: 16px;
+    color: #28a745;
+    margin-top: 15px;
+    text-align: left; /* Left align response message */
+}
