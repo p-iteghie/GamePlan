@@ -74,6 +74,25 @@ function Calendar() {
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
 
+    const getColorByObjectId = (objectId) => {
+        const charSum = objectId
+            .split('')
+            .reduce((sum, char) => sum + char.charCodeAt(0), 0); // Sum of character codes
+
+        // Step 2: Map the numeric value to a hue (0-360)
+        const hue = charSum*1.83 % 360;
+        return `hsl(${hue}, 80%, 65%)`; // Generate a pastel color
+    };
+    const getHoverColorByObjectId = (objectId) => {
+        const charSum = objectId
+            .split('')
+            .reduce((sum, char) => sum + char.charCodeAt(0), 0); // Sum of character codes
+
+        // Step 2: Map the numeric value to a hue (0-360)
+        const hue = charSum * 1.83 % 360;
+        return `hsl(${hue}, 50%, 55%)`; // Generate a pastel color
+    };
+
     return (
         <div className="Calendar">
             <h1>GamePlan Calendar</h1>
@@ -126,7 +145,10 @@ function Calendar() {
                                 <div className="date">{day}</div>
                                 <div className="events">
                                     {dayEvents.map((event, index) => (
-                                        <div className="event" key={index}>
+                                        <div className="event" key={index} style={{
+                                            backgroundColor: getColorByObjectId(event._id),
+                                            transition: "background-color 0.2s ease", }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = getHoverColorByObjectId(event._id)}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = getColorByObjectId(event._id)}>
                                             {event.title || "No Title"}
                                         </div>
                                     ))}
