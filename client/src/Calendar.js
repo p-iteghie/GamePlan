@@ -96,11 +96,15 @@ function Calendar() {
         </header>
         <div className="calendar-grid">
           {Array.from({ length: daysInMonth }, (_, i) => {
-            const day = i + 1;
-            const dayEvents = filteredEvents.filter(event => {
-              const eventDate = new Date(event.date);
-              return eventDate.getDate() === day;
-            });
+          const day = i + 1; // Calendar days start from 1
+          const dayEvents = filteredEvents.filter(event => {
+            const eventDate = new Date(event.startTime); // Ensure this matches your schema
+            return (
+              eventDate.getDate() === day &&
+              eventDate.getMonth() === currentDate.getMonth() &&
+              eventDate.getFullYear() === currentDate.getFullYear()
+            );
+          });
 
             return (
               <div className="calendar-day" key={day}>

@@ -281,7 +281,7 @@ app.get('/getevents', async (req, res) => {
         }
 
         // Find the user using the username decoded from the token
-        const user = await User.findOne({ username: loggedInUsername });
+        const user = await User.findOne({ username: loggedInUsername }).populate('calendar');
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
