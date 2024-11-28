@@ -157,23 +157,21 @@ function AddEvent() {
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="attendees">Attendees: </label>
-                    <div>
-                        {users.map((user) => (
-                            <div key={user._id}>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        value={user._id}
-                                        onChange={handleAttendeeChange}
-                                        checked={attendees.includes(user._id)} // Check if the user ID is in the attendees list
-                                    />
-                                    {user.username}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
+                <div className="attendees">
+                    <label htmlFor="attendees">Attendees:</label>
+                    {users.map((user) => (
+                        <div className="attendee" key={user._id}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    value={user._id}
+                                    onChange={handleAttendeeChange}
+                                    checked={attendees.includes(user._id)}
+                                />
+                                {user.username}
+                            </label>
+                        </div>
+                    ))}
                 </div>
 
                 <button type="submit">Add Event</button>

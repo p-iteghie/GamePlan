@@ -1,0 +1,129 @@
+/* Form container styling */
+.add-event-container {
+    max-width: 900px; /* Matches the calendar width */
+    margin: 40px auto; /* Center horizontally with spacing from top */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align form content to the left */
+}
+
+/* Greeting message */
+.uppercase-text h2 {
+    text-transform: uppercase;
+    color: #333;
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-align: left; /* Align title to the left */
+    width: 100%; /* Take up full container width */
+}
+
+/* Form styling */
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align form fields to the left */
+    gap: 15px; /* Consistent spacing between fields */
+}
+
+/* Label styling */
+form label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* Input and textarea styling */
+form input,
+form textarea,
+form select {
+    width: 80%; /* Limit width to 80% of the container */
+    max-width: 700px; /* Prevent overly wide inputs */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+    border-color: #006bff;
+    box-shadow: 0 0 5px rgba(0, 107, 255, 0.3);
+    outline: none;
+}
+
+/* Attendees styling */
+.attendees {
+    margin-top: 15px;
+}
+
+.attendees label {
+    display: flex; /* Align checkbox and text on the same line */
+    align-items: center; /* Vertically align the text with the checkbox */
+    gap: 10px; /* Add space between the checkbox and the name */
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.attendees input[type="checkbox"] {
+    margin: 0; /* Remove default margin for precise alignment */
+}
+
+/* Submit button styling */
+form button {
+    background-color: #006bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    align-self: flex-start; /* Align the button to the left */
+}
+
+form button:hover {
+    background-color: #0056cc;
+}
+
+/* Response message styling */
+form + p {
+    text-align: left;
+    font-size: 16px;
+    color: #28a745; /* Green for success */
+    margin-top: 20px;
+}
+
+form + p.error {
+    color: #dc3545; /* Red for error */
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+    .add-event-container {
+        padding: 15px;
+        margin: 20px auto;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        width: 100%; /* Use full width on smaller screens */
+        max-width: none;
+        font-size: 14px;
+    }
+
+    form button {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
