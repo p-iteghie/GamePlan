@@ -114,11 +114,25 @@ function FriendRequests() {
 
     return (
         <div>
+            <h1>Your Friends</h1>
+            <div>
+                
+                {friends.length === 0 ? (
+                    <p>You have no friends yet.</p>
+                ) : (
+                    friends.map((friend) => (
+                        <div key={friend._id}>
+                            <p>{friend.username}</p>
+                        </div>
+                    ))
+                )}
+            </div>
             <h1>Friend Requests</h1>
             {error && <div style={{ color: "red" }}>{error}</div>}
             <div>
                 
             </div>
+            
             <div>
                 {friendRequests.length === 0 ? (
                     <p>No friend requests.</p>
@@ -128,18 +142,6 @@ function FriendRequests() {
                             <p>{request.username} wants to be your friend!</p>
                             <button onClick={() => handleAccept(request._id)}>Accept</button>
                             <button onClick={() => handleDeny(request._id)}>Deny</button>
-                        </div>
-                    ))
-                )}
-            </div>
-            <div>
-                <h2>Your Friends</h2>
-                {friends.length === 0 ? (
-                    <p>You have no friends yet.</p>
-                ) : (
-                    friends.map((friend) => (
-                        <div key={friend._id}>
-                            <p>{friend.username}</p>
                         </div>
                     ))
                 )}

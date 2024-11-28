@@ -91,7 +91,7 @@ app.post('/login', (req, res) => {
               username: user.username,
             },
             "RANDOM-TOKEN",
-            { expiresIn: "24h" }
+            { expiresIn: "2h" }
             //increase security with user id and super secret key
           );
 

@@ -97,16 +97,6 @@ function Calendar() {
         <div className="Calendar">
             <h1>GamePlan Calendar</h1>
 
-            {/* Debug panels for events */}
-            <div>
-                <h3>Event Data (Raw):</h3>
-                <pre>{JSON.stringify(events, null, 2)}</pre>
-            </div>
-            <div>
-                <h3>Filtered Event Data:</h3>
-                <pre>{JSON.stringify(filteredEvents, null, 2)}</pre>
-            </div>
-
             {/* Calendar UI */}
             <div className="calendar-container">
                 <header>
@@ -157,6 +147,16 @@ function Calendar() {
                         );
                     })}
                 </div>
+            </div>
+            {/* Debug panels for events */}
+
+            <div>
+                <h3>Event Data (Raw):</h3>
+                <pre>{JSON.stringify(events, null, 2)}</pre>
+            </div>
+            <div>
+                <h3>Filtered Event Data:</h3>
+                <pre>{JSON.stringify(filteredEvents, null, 2)}</pre>
             </div>
         </div>
     );
