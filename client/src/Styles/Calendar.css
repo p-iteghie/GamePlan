@@ -1,85 +1,102 @@
-/* Container for the calendar */
+/* Calendar container styling */
 .calendar-container {
-    max-width: 800px;
-    margin: 20px auto;
-    text-align: center;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Header styling */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  header button {
-    padding: 8px 16px;
-    border: none;
-    background-color: #007BFF;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  header button:hover {
-    background-color: #0056b3;
-  }
-  
-  header h2 {
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  /* Calendar grid styling */
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-  }
-  
-  .calendar-day {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    min-height: 100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #f9f9f9;
-  }
-  
-  .calendar-day:hover {
-    background-color: #f1f1f1;
-  }
-  
-  /* Styling for the date number */
-  .date {
-    font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  
-  /* Events container */
-  .events {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  /* Individual event styling */
-  .event {
-    background-color: #007BFF;
-    color: white;
-    padding: 5px;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: center;
-  }
-  
-  .event:hover {
-    background-color: #0056b3;
-  }
-  
+  max-width: 900px; /* Increased size */
+  margin: 30px auto; /* Keep it centered with adequate spacing */
+  background-color: #fff;
+  padding: 20px; /* Maintain padding for a clean appearance */
+  border-radius: 10px; /* Slightly larger border radius */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Header styling */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* Keep spacing proportional */
+}
+
+header h2 {
+  font-size: 22px; /* Slightly larger font for emphasis */
+  margin: 0;
+  color: #333; /* Darker text for better readability */
+}
+
+header button {
+  padding: 8px 16px; /* Proportional button size */
+  font-size: 14px;
+  border: none;
+  background-color: #006bff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+header button:hover {
+  background-color: #0056cc;
+}
+
+/* Calendar grid styling */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* Keep grid with 7 columns */
+  gap: 15px; /* Slightly more spacing between days */
+}
+
+/* Individual day styling */
+.calendar-day {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px; /* Increased padding for spacious feel */
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar-day .date {
+  font-weight: bold;
+  font-size: 16px; /* Larger font for dates */
+  margin-bottom: 8px; /* Adjust spacing */
+}
+
+.calendar-day .events {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Slightly larger gap between events */
+}
+
+/* Event styling */
+.event {
+  background-color: #006bff;
+  color: #fff;
+  padding: 5px 8px; /* Increased padding for clarity */
+  border-radius: 4px;
+  font-size: 13px; /* Slightly larger font */
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.event:hover {
+  background-color: #0056cc;
+}
+
+/* Raw data button styling */
+.button-raw-data {
+  background-color: #006bff; /* Match button style with page */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px; /* Match font size with header buttons */
+  transition: background-color 0.3s ease;
+  display: block; /* Center-align the button */
+  margin: 20px auto; /* Centered with margin */
+  text-align: center;
+}
+
+.button-raw-data:hover {
+  background-color: #0056cc;
+}

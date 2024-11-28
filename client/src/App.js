@@ -9,7 +9,7 @@ import Calendar from './Calendar';
 import { Login, GetUserButton } from './Login';
 import SendFriendRequest from './Friends';
 import LogoutButton from './Logout';
-import "./App.css"; // Create a simple CSS file for styling.
+import "./Styles/App.css"; // Create a simple CSS file for styling.
 
 function App() {
     return (

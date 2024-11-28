@@ -13,7 +13,7 @@ function AddEvent() {
     const [users, setUsers] = useState([]);
     const [responseMessage, setResponseMessage] = useState('');
     const [loggedInUserId, setLoggedInUserId] = useState('');
-    const [loggedInUsername, setLoggedInUsername] = useState(''); 
+    const [loggedInUsername, setLoggedInUsername] = useState('');
 
     // Fetch available users when component loads
     useEffect(() => {
@@ -24,7 +24,7 @@ function AddEvent() {
                 console.log('Decoded token:', decoded);
                 // Assuming the token has a username, store the username in the state
                 setLoggedInUserId(decoded._id);  // or decoded.userId, depending on what you store in the token
-                setLoggedInUsername(decoded.username); 
+                setLoggedInUsername(decoded.username);
             } catch (error) {
                 console.error('Error decoding token:', error);
             }
@@ -45,7 +45,7 @@ function AddEvent() {
                     });
                     const data = await response.json();
                     // Filter out the logged-in user from the fetched data
-                    
+
                     setUsers(data); // Set users state with the filtered data
                 } catch (error) {
                     console.error('Error fetching users:', error);

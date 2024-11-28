@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from 'jwt-decode';
-import "./Styles/Calendar.css"; // Create a simple CSS file for styling.
+import "./Styles/Calendar.css";
 
 function Calendar() {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [events, setEvents] = useState([]);
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [events, setEvents] = useState([]);
     const [filteredEvents, setFilteredEvents] = useState([]);
     const [loggedInUserId, setLoggedInUserId] = useState('');
     const [loggedInUsername, setLoggedInUsername] = useState('');
+    const [showRawData, setShowRawData] = useState(false); // State to toggle raw data display
 
     // Fetch available users when component loads
     useEffect(() => {
@@ -15,9 +16,7 @@ function Calendar() {
         if (token) {
             try {
                 const decoded = jwtDecode(token);
-                console.log('Decoded token:', decoded);
-                // Assuming the token has a username, store the username in the state
-                setLoggedInUserId(decoded._id);  // or decoded.userId, depending on what you store in the token
+                setLoggedInUserId(decoded._id);
                 setLoggedInUsername(decoded.username);
             } catch (error) {
                 console.error('Error decoding token:', error);
@@ -25,72 +24,61 @@ function Calendar() {
         }
     }, []);
 
-  useEffect(() => {
-    // Fetch events from the server when the component mounts.
-      const fetchEvents = async () => {
-          const token = localStorage.getItem('token');
-          if (loggedInUsername) {
-              try {
-                  const response = await fetch('http://localhost:5000/getevents', {
-                      method: 'GET',
-                      headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': `Bearer ${token}`,
-                      },
-                  }); // Ensure your server endpoint is correct.
-                  const data = await response.json();
-                  setEvents(data);
-              } catch (error) {
-                  console.error("Error fetching events:", error);
-              }
-          }
-      
+    useEffect(() => {
+        const fetchEvents = async () => {
+            const token = localStorage.getItem('token');
+            if (loggedInUsername) {
+                try {
+                    const response = await fetch('http://localhost:5000/getevents', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    const data = await response.json();
+                    setEvents(data);
+                } catch (error) {
+                    console.error("Error fetching events:", error);
+                }
+            }
+        };
+        fetchEvents();
+    }, [loggedInUsername]);
+
+    useEffect(() => {
+        const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+
+        const eventsInMonth = events.filter(event => {
+            const eventStartTime = new Date(event.startTime);
+            const eventEndTime = new Date(event.endTime);
+            return (
+                (eventStartTime >= startOfMonth && eventStartTime <= endOfMonth) ||
+                (eventEndTime >= startOfMonth && eventEndTime <= endOfMonth) ||
+                (eventStartTime <= startOfMonth && eventEndTime >= endOfMonth)
+            );
+        });
+
+        setFilteredEvents(eventsInMonth);
+    }, [currentDate, events]);
+
+    const changeMonth = (direction) => {
+        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + direction, 1));
     };
 
-    fetchEvents();
-  }, [loggedInUsername]);
-
-  useEffect(() => {
-    // Filter events based on the current month and year.
-    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-
-      const eventsInMonth = events.filter(event => {
-          const eventStartTime = new Date(event.startTime);
-          const eventEndTime = new Date(event.endTime); // For multi-day events
-          return (
-              (eventStartTime >= startOfMonth && eventStartTime <= endOfMonth) || // Starts in the month
-              (eventEndTime >= startOfMonth && eventEndTime <= endOfMonth) || // Ends in the month
-              (eventStartTime <= startOfMonth && eventEndTime >= endOfMonth) // Spans entire month
-          );
-      });
-
-    setFilteredEvents(eventsInMonth);
-  }, [currentDate, events]);
-
-  const changeMonth = (direction) => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + direction, 1));
-  };
-
-  const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+    const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
 
     const getColorByObjectId = (objectId) => {
-        const charSum = objectId
-            .split('')
-            .reduce((sum, char) => sum + char.charCodeAt(0), 0); // Sum of character codes
-
-        // Step 2: Map the numeric value to a hue (0-360)
-        const hue = charSum*1.83 % 360;
-        return `hsl(${hue}, 80%, 65%)`; // Generate a pastel color
-    };
-    const getHoverColorByObjectId = (objectId) => {
-        const charSum = objectId
-            .split('')
-            .reduce((sum, char) => sum + char.charCodeAt(0), 0); // Sum of character codes
-
-        // Step 2: Map the numeric value to a hue (0-360)
+        const charSum = objectId.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
         const hue = charSum * 1.83 % 360;
-        return `hsl(${hue}, 50%, 55%)`; // Generate a pastel color
+        return `hsl(${hue}, 80%, 65%)`;
+    };
+
+    const getHoverColorByObjectId = (objectId) => {
+        const charSum = objectId.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+        const hue = charSum * 1.83 % 360;
+        return `hsl(${hue}, 50%, 55%)`;
     };
 
     return (
@@ -109,23 +97,15 @@ function Calendar() {
 
                 <div className="calendar-grid">
                     {Array.from({ length: daysInMonth }, (_, i) => {
-                        const day = i + 1; // Calendar days start from 1
-
-                        // Get the date for the current calendar day
+                        const day = i + 1;
                         const currentDayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
 
-                        // Filter the events for this day
                         const dayEvents = filteredEvents.filter(event => {
                             const eventStartTime = new Date(event.startTime);
                             const eventEndTime = new Date(event.endTime);
-
-                            // Ensure events spanning multiple days (or starting on this day) are displayed
                             return (
-                                // If the event starts on or before the current day and ends on or after this day
                                 (eventStartTime <= currentDayDate && eventEndTime >= currentDayDate) ||
-                                // If the event starts before the current day and ends on or after the current day (spans the day)
                                 (eventStartTime < currentDayDate && eventEndTime >= currentDayDate) ||
-                                // Special case: If the event starts on this day and the end time is in the future
                                 (eventStartTime.getDate() === currentDayDate.getDate() && eventStartTime.getMonth() === currentDayDate.getMonth())
                             );
                         });
@@ -135,10 +115,16 @@ function Calendar() {
                                 <div className="date">{day}</div>
                                 <div className="events">
                                     {dayEvents.map((event, index) => (
-                                        <div className="event" key={index} style={{
-                                            backgroundColor: getColorByObjectId(event._id),
-                                            transition: "background-color 0.2s ease", }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = getHoverColorByObjectId(event._id)}
-                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = getColorByObjectId(event._id)}>
+                                        <div
+                                            className="event"
+                                            key={index}
+                                            style={{
+                                                backgroundColor: getColorByObjectId(event._id),
+                                                transition: "background-color 0.2s ease",
+                                            }}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = getHoverColorByObjectId(event._id)}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = getColorByObjectId(event._id)}
+                                        >
                                             {event.title || "No Title"}
                                         </div>
                                     ))}
@@ -148,19 +134,20 @@ function Calendar() {
                     })}
                 </div>
             </div>
-            {/* Debug panels for events */}
 
-            <div>
-                <h3>Event Data (Raw):</h3>
-                <pre>{JSON.stringify(events, null, 2)}</pre>
-            </div>
-            <div>
-                <h3>Filtered Event Data:</h3>
-                <pre>{JSON.stringify(filteredEvents, null, 2)}</pre>
-            </div>
+            {/* Toggle raw data button */}
+            <button className="button-raw-data" onClick={() => setShowRawData(!showRawData)}>
+                {showRawData ? "Hide Raw Data" : "Show Raw Data"}
+            </button>
+
+            {showRawData && (
+                <div>
+                    <h3>Event Data (Raw):</h3>
+                    <pre>{JSON.stringify(events, null, 2)}</pre>
+                </div>
+            )}
         </div>
     );
-
-};
+}
 
 export default Calendar;
