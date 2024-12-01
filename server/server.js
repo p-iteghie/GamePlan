@@ -25,8 +25,6 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/register', (req, res) => {
 
     const { username, password } = req.body;
-
-
    
         bcrypt.hash(req.body.password, 10)
         .then((hashedPassword) => {
