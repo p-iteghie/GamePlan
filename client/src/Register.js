@@ -9,10 +9,26 @@ function Register()
   const [password, setPassword] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
 
+  const [regMessage, setregMessage] = useState('');
+  const [passValid, setPassValid] = useState(true);
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevent page refresh
 
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (passwordRegex.test(password)) 
+      {
+      console.log("Password is valid!");
+      } 
+    else 
+    {
+        console.log("Password is invalid!");
+        setregMessage("Password must be at least 8 characters long, include a number, and a capital letter.");
+        setPassValid(false);
+        return; // Stop submission if validation fails
+    }
+    setregMessage('');
     // Make a POST request with both username and password
     const responseMessage = await fetch('http://localhost:5000/register', {
     method: 'POST',
@@ -50,6 +66,10 @@ function Register()
             onChange={(e) => setPassword(e.target.value)}  // Update password state
           />
         </div>
+
+        {/* Display error message if password is invalid */}
+        {!passValid && <p style={{ color: 'red' }}>{regMessage}</p>}
+        
 
         <button type="submit">Register</button>
       </form>
