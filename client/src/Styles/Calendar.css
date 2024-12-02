@@ -39,20 +39,26 @@ header button:hover {
 
 /* Calendar grid styling */
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr); /* Keep grid with 7 columns */
-  gap: 15px; /* Slightly more spacing between days */
+	display: grid;
+	grid-template-columns: repeat(7, 1fr); /* Equal-width columns */
+	gap: 15px; /* Space between day boxes */
+	width: 100%; /* Ensure the grid spans the full container width */
+	box-sizing: border-box; /* Include padding and border in size calculations */
 }
 
 /* Individual day styling */
 .calendar-day {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px; /* Increased padding for spacious feel */
-  background-color: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 12px;
+	background-color: #f9f9f9;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start; /* Align content at the top */
+	min-width: 0; /* Prevent flexbox overflow issues */
+	overflow: hidden; /* Avoid content causing box expansion */
+	min-height: 50px;
 }
 
 .calendar-day .date {
@@ -69,17 +75,12 @@ header button:hover {
 
 /* Event styling */
 .event {
-  background-color: #006bff;
   color: #fff;
   padding: 5px 8px; /* Increased padding for clarity */
   border-radius: 4px;
   font-size: 13px; /* Slightly larger font */
   text-align: center;
   transition: background-color 0.3s ease;
-}
-
-.event:hover {
-  background-color: #0056cc;
 }
 
 /* Raw data button styling */

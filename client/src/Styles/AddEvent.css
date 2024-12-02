@@ -63,6 +63,9 @@ form select:focus {
 /* Attendees styling */
 .attendees {
     margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .attendees label {
